@@ -1,0 +1,10 @@
+POP_SIZE = 300
+STACK_SIZE = 8
+MUTATION_PROBABILITY = 0.4
+CROSSOVER_PROBABILITY = 0.4
+MAX_GENS = 10_000
+FIT_TOL = 5e-3
+simplification = True
+regression_metric = 'mse'
+clo_algorithm = 'BFGS'
+
