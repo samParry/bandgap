@@ -1,10 +1,47 @@
 POP_SIZE = 300
-STACK_SIZE = 8
+STACK_SIZE = 6
 MUTATION_PROBABILITY = 0.4
 CROSSOVER_PROBABILITY = 0.4
-MAX_GENS = 10_000
+MAX_GENS = 1_000
 FIT_TOL = 5e-3
 simplification = True
 regression_metric = 'mse'
 clo_algorithm = 'BFGS'
 
+# no super features
+# results for 1000 and 2000 gens are identical
+x5 = (phi + 2*c1*phi)**2
+ FITNESS   COMPLEXITY    EQUATION
+1.776e-02      7      f(X_0) = (X_4 + (2)((X_0)(X_4)))(X_4 + (2)((X_0)(X_4)))
+1.931e-02      6      f(X_0) = (X_0 + X_4)(X_0 + X_4 - (X_2))
+2.272e-02      5      f(X_0) = (X_0 + X_4)((X_0 + X_4)(X_0 + X_4))
+2.370e-02      4      f(X_0) = (X_0 + X_4)(X_0 + X_4)
+4.202e-02      3      f(X_0) = X_3 - (X_2)
+4.338e-02      2      f(X_0) = (X_3)(X_3)
+6.441e-02      1      f(X_0) = 0
+
+x6 = 2 * x5 * (c1 + r)
+ FITNESS   COMPLEXITY    EQUATION
+1.348e-02      7      f(X_0) = (2)((X_0 + X_3)(X_5))
+1.385e-02      6      f(X_0) = X_5 + (X_0 - (X_2))(X_5)
+1.493e-02      5      f(X_0) = X_5 + (X_5)(X_5 - (X_3))
+1.521e-02      4      f(X_0) = X_5 + (X_0)(X_5)
+1.776e-02      1      f(X_0) = X_5
+
+x7 = X_6 - X_1 * X_3 = x6 - c2*r
+ FITNESS   COMPLEXITY    EQUATION
+1.184e-02      5      f(X_0) = X_6 - ((X_1)(X_3))
+1.348e-02      1      f(X_0) = X_6
+
+x8 = x7 + c2 * (c2 + x7) = c2**2 + c2*x7 + x7
+ FITNESS   COMPLEXITY    EQUATION
+1.070e-02      5      f(X_0) = X_7 + (X_1)(X_1 + X_7)
+1.127e-02      4      f(X_0) = X_7 - ((X_2)(X_7))
+1.184e-02      1      f(X_0) = X_7
+
+x9 = -h**3 - x8*h**2 + x8
+ FITNESS   COMPLEXITY    EQUATION
+9.196e-03      6      f(X_0) = X_8 - (((X_2)(X_2))(X_2 + X_8))
+9.508e-03      5      f(X_0) = X_8 - ((X_2)((X_2)(X_2)))
+1.028e-02      4      f(X_0) = X_8 - ((X_2)(X_8))
+1.070e-02      1      f(X_0) = X_8
