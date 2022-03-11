@@ -25,7 +25,7 @@ STACK_SIZE = 10
 MUTATION_PROBABILITY = 0.4
 CROSSOVER_PROBABILITY = 0.4
 MAX_GENS = 1_000
-FIT_TOL = 5e-3
+FIT_TOL = 1e-3
 simplification = True
 regression_metric = 'mse'
 clo_algorithm = 'BFGS'
@@ -42,25 +42,25 @@ x_data = np.stack((c1, c2, h, r, phi), axis=-1)
 y_data = rb
 
 # New superfeature(s)
-# x5 = (phi + 6*c1*phi**2)**2
-# x_5 = x5.reshape(882, 1)
-# x_data = np.append(x_data, x_5, axis=1)
+x5 = ((phi**2 + 4*c1*phi**2 - 4*phi*c1*h + c1*h**2)**2)/(phi**2)
+x_5 = x5.reshape(882, 1)
+x_data = np.append(x_data, x_5, axis=1)
 
-# x6 = x5 - c2*r + c2*x5
-# x_6 = x6.reshape(882, 1)
-# x_data = np.append(x_data, x_6, axis=1)
+x6 = x5 - (x5 - phi) * (x5**2 - c2 - x5)
+x_6 = x6.reshape(882, 1)
+x_data = np.append(x_data, x_6, axis=1)
 
-# x7 = (-2*x6 + x6**2 - c2**2)**2
-# x_7 = x7.reshape(882, 1)
-# x_data = np.append(x_data, x_7, axis=1)
+x7 = x6 * (1 + x6*(c2 + h)/r - c2 - h)
+x_7 = x7.reshape(882, 1)
+x_data = np.append(x_data, x_7, axis=1)
 
-# x8 = x7 + 2*c2*x7 * (c2 + x7)
-# x_8 = x8.reshape(882, 1)
-# x_data = np.append(x_data, x_8, axis=1)
+x8 = 2*x7 + 4*x7*c2**2 - x6
+x_8 = x8.reshape(882, 1)
+x_data = np.append(x_data, x_8, axis=1)
 
-# x9 = (x8**2 + x8*c1**2) / x6
-# x_9 = x9.reshape(882, 1)
-# x_data = np.append(x_data, x_9, axis=1)
+x9 = x8 - x8 * (phi**2 - c1*phi - c1)**2
+x_9 = x9.reshape(882, 1)
+x_data = np.append(x_data, x_9, axis=1)
 
 # Agraph generation/variation
 component_generator = ComponentGenerator(x_data.shape[1], constant_probability=0.1, num_initial_load_statements=1)
