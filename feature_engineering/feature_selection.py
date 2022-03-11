@@ -21,7 +21,7 @@ def agraph_similarity(ag_1, ag_2):
     return ag_1.fitness == ag_2.fitness and ag_1.get_complexity() == ag_2.get_complexity()
 
 POP_SIZE = 300
-STACK_SIZE = 6
+STACK_SIZE = 10
 MUTATION_PROBABILITY = 0.4
 CROSSOVER_PROBABILITY = 0.4
 MAX_GENS = 1_000
@@ -42,25 +42,25 @@ x_data = np.stack((c1, c2, h, r, phi), axis=-1)
 y_data = rb
 
 # New superfeature(s)
-x5 = (phi + 2*c1*phi)**2
-x_5 = x5.reshape(882, 1)
-x_data = np.append(x_data, x_5, axis=1)
+# x5 = (phi + 6*c1*phi**2)**2
+# x_5 = x5.reshape(882, 1)
+# x_data = np.append(x_data, x_5, axis=1)
 
-x6 = 2 * x5 * (c1+r)
-x_6 = x6.reshape(882, 1)
-x_data = np.append(x_data, x_6, axis=1)
+# x6 = x5 - c2*r + c2*x5
+# x_6 = x6.reshape(882, 1)
+# x_data = np.append(x_data, x_6, axis=1)
 
-x7 = x6 - c2*r
-x_7 = x7.reshape(882, 1)
-x_data = np.append(x_data, x_7, axis=1)
+# x7 = (-2*x6 + x6**2 - c2**2)**2
+# x_7 = x7.reshape(882, 1)
+# x_data = np.append(x_data, x_7, axis=1)
 
-x8 = c2**2 + c2*x7 + x7
-x_8 = x8.reshape(882, 1)
-x_data = np.append(x_data, x_8, axis=1)
+# x8 = x7 + 2*c2*x7 * (c2 + x7)
+# x_8 = x8.reshape(882, 1)
+# x_data = np.append(x_data, x_8, axis=1)
 
-x9 = -h**3 - x8*h**2 + x8
-x_9 = x9.reshape(882, 1)
-x_data = np.append(x_data, x_9, axis=1)
+# x9 = (x8**2 + x8*c1**2) / x6
+# x_9 = x9.reshape(882, 1)
+# x_data = np.append(x_data, x_9, axis=1)
 
 # Agraph generation/variation
 component_generator = ComponentGenerator(x_data.shape[1], constant_probability=0.1, num_initial_load_statements=1)

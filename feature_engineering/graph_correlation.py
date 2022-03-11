@@ -25,14 +25,19 @@ x_default_labels = ['c1', 'c2', 'h', 'r', 'phi']
 
 # correlation of super features
 x_superfeature_labels = ['SF1', 'SF2', 'SF3', 'SF4', 'SF5']
-x5 = (phi + 2*c1*phi)**2
-x6 = 2 * x5 * (c1 + r)
-x7 = x6 - c2 * r
-x8 = c2**2 + c2*x7 + x7
-x9 = -h**3 - x8*h**2 + x8
+# x5 = (phi + 2*c1*phi)**2
+# x6 = 2 * x5 * (c1 + r)
+# x7 = x6 - c2 * r
+# x8 = c2**2 + c2*x7 + x7
+# x9 = -h**3 - x8*h**2 + x8
+x5 = (phi + 6*c1*phi**2)**2
+x6 = x5 - c2*r + c2*x5
+x7 = (-2*x6 + x6**2 - c2**2)**2
+x8 = x7 + 2*c2*x7 * (c2 + x7)
+x9 = (x8**2 + x8*c1**2) / x6
 x_super = np.stack((x5, x6, x7, x8, x9), axis=-1)
 corr_super = np.corrcoef(x_super.T, rb.T)[-1,:-1]
-fits = [.01776, .01348, .01184, .01070, .009196]
+fits = [.01227, .01033, .008427, .006527, .005404]
 
 # plot correlation of features
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15,5))
