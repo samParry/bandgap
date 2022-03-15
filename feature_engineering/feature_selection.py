@@ -21,7 +21,7 @@ def agraph_similarity(ag_1, ag_2):
     return ag_1.fitness == ag_2.fitness and ag_1.get_complexity() == ag_2.get_complexity()
 
 # Global parameters
-POP_SIZE = 300
+POP_SIZE = 100
 STACK_SIZE = 10
 MUTATION_PROBABILITY = 0.4
 CROSSOVER_PROBABILITY = 0.4
@@ -39,21 +39,26 @@ h = sheet[:, 2]     # X_2
 r = sheet[:, 3]     # X_3
 phi = sheet[:, 4]   # X_4
 rb = sheet[:, 5]
+X_0 = c1
+X_1 = c2
+X_2 = h
+X_3 = r
+X_4 = phi
 x_data = np.stack((c1, c2, h, r, phi), axis=-1)
 y_data = rb
 
 # New superfeature(s)
-x5 = c1*phi**2
-x_5 = x5.reshape(882, 1)
-x_data = np.append(x_data, x_5, axis=1)
+# x5 = 2*(phi**4 + 6*phi**3*c1 + 9*phi**4*c1**2)
+# x_5 = x5.reshape(882, 1)
+# x_data = np.append(x_data, x_5, axis=1)
 
-x6 = (c1 + phi)**2
-x_6 = x6.reshape(882, 1)
-x_data = np.append(x_data, x_6, axis=1)
-
-x7 = c1 * phi
-x_7 = x7.reshape(882, 1)
-x_data = np.append(x_data, x_7, axis=1)
+# x6 = (c1 + phi)**2
+# x_6 = x6.reshape(882, 1)
+# x_data = np.append(x_data, x_6, axis=1)
+#
+# x7 = c1 * phi
+# x_7 = x7.reshape(882, 1)
+# x_data = np.append(x_data, x_7, axis=1)
 
 # x8 = 2*x7 + 4*x7*c2**2 - x6
 # x_8 = x8.reshape(882, 1)
@@ -77,7 +82,7 @@ mutation = AGraphMutation(component_generator)
 training_data = ExplicitTrainingData(x_data, y_data)
 # TODO: consider writing my own fitness function instead of using ExplicitRegression
 # TODO: Figure out why 'relative' breaks everything. Should normalize fitness of data near zero
-fitness = ExplicitRegression(training_data=training_data, metric=regression_metric, relative=False)
+fitness = ExplicitRegression(training_data=training_data, metric=regression_metric, relative=True)
 
 local_opt_fitness = ContinuousLocalOptimization(fitness, algorithm=clo_algorithm)
 # make every constant zero and don't change it (hacky solution)
@@ -102,4 +107,4 @@ print("Best individual\n f(X_0) =", island.get_best_individual())
 print(" FITNESS   COMPLEXITY    EQUATION")
 for member in pareto_front:
     print("%.3e     " % member.fitness, member.get_complexity(),
-          "     f(X_0) =", member)
+          "     f(X_0) =", member.get_formatted_string("sympy"))
