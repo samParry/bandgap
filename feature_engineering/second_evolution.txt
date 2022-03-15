@@ -26,12 +26,12 @@ x6 = 2 * x5 * (c1 + r)
 1.521e-02      4      f(X_0) = X_5 + (X_0)(X_5)
 1.776e-02      1      f(X_0) = X_5
 
-x7 = X_6 - X_1 * X_3 = x6 - c2*r
+x7 = x6 - c2*r
  FITNESS   COMPLEXITY    EQUATION
 1.184e-02      5      f(X_0) = X_6 - ((X_1)(X_3))
 1.348e-02      1      f(X_0) = X_6
 
-x8 = x7 + c2 * (c2 + x7) = c2**2 + c2*x7 + x7
+x8 = c2**2 + c2*x7 + x7
  FITNESS   COMPLEXITY    EQUATION
 1.070e-02      5      f(X_0) = X_7 + (X_1)(X_1 + X_7)
 1.127e-02      4      f(X_0) = X_7 - ((X_2)(X_7))

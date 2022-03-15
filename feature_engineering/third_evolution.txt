@@ -8,7 +8,14 @@ simplification = True
 regression_metric = 'mse'
 clo_algorithm = 'BFGS'
 
-x5 = (phi + 6*c1*phi**2)**2
+x5 = (phi + 6*c1*phi**2)**2 = (phi**2 + 36*C1**2*phi**4 + phi**4)
+use x5 = c1*phi**2
+    Instead of taking the best equation, take the key parts of the best equations
+    i.e.
+        c1*phi**2
+        (c1 + phi)**2
+        (c1 * phi)
+
  FITNESS   COMPLEXITY    EQUATION
 1.227e-02      8      f(X_0) = (X_4 + (6)((X_0)((X_4)(X_4))))(X_4 + (6)((X_0)((X_4)(X_4))))
 1.450e-02      7      f(X_0) = (X_4 + (3)((X_0)(X_4)))(X_4 + (3)((X_0)(X_4)))
