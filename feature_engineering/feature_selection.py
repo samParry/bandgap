@@ -21,7 +21,7 @@ def agraph_similarity(ag_1, ag_2):
     return ag_1.fitness == ag_2.fitness and ag_1.get_complexity() == ag_2.get_complexity()
 
 # Global parameters
-POP_SIZE = 100
+POP_SIZE = 300
 STACK_SIZE = 10
 MUTATION_PROBABILITY = 0.4
 CROSSOVER_PROBABILITY = 0.4
@@ -29,7 +29,9 @@ MAX_GENS = 1_000
 FIT_TOL = 1e-3
 simplification = True
 regression_metric = 'mse'
-clo_algorithm = 'BFGS'
+clo_algorithm = 'lm'
+# If I want a scalar fitness -> BFGS
+# If I want a vectorized fitness -> lm (faster)
 
 # Build x/y data
 sheet = pd.read_excel('data.xlsx').to_numpy()
@@ -46,6 +48,7 @@ X_3 = r
 X_4 = phi
 x_data = np.stack((c1, c2, h, r, phi), axis=-1)
 y_data = rb
+y_data[y_data == 0] = 1e-1
 
 # New superfeature(s)
 # x5 = 2*(phi**4 + 6*phi**3*c1 + 9*phi**4*c1**2)
@@ -84,9 +87,9 @@ training_data = ExplicitTrainingData(x_data, y_data)
 # TODO: Figure out why 'relative' breaks everything. Should normalize fitness of data near zero
 fitness = ExplicitRegression(training_data=training_data, metric=regression_metric, relative=True)
 
-local_opt_fitness = ContinuousLocalOptimization(fitness, algorithm=clo_algorithm)
+# local_opt_fitness = ContinuousLocalOptimization(fitness, algorithm=clo_algorithm)
 # make every constant zero and don't change it (hacky solution)
-# local_opt_fitness = ContinuousLocalOptimization(fitness, algorithm=clo_algorithm, param_init_bounds=(0,0), tol=100)
+local_opt_fitness = ContinuousLocalOptimization(fitness, algorithm=clo_algorithm, param_init_bounds=(0,0), tol=100)
 # local_opt_fitness = ContinuousLocalOptimization(fitness, algorithm='lm', param_init_bounds=(0,0),
 #                                                   options={"ftol": 100, "xtol": 100, "gtol": 100})
 evaluator = Evaluation(local_opt_fitness)

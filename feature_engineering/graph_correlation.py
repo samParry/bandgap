@@ -59,6 +59,7 @@ fits_10 = [.01194, .00778, .006051, .004972, .004030]
 x_super_10 = np.stack((x5, x6, x7, x8, x9), axis=-1)
 corr_super_10 = np.corrcoef(x_super_10.T, rb.T)[-1,:-1]
 
+
 # plot correlation of features
 fig, axs = plt.subplots(2, 2, figsize=(12, 8))
 ax1 = axs[0,0]
@@ -75,11 +76,13 @@ ax1.bar(x_default_labels, corr_default, zorder=3)
 addlabels(ax1, x_default_labels, corr_default)
 ax1.grid(axis='y', linestyle='--', zorder=0)
 
+test = 0.05480385957888475 + (-0.3799827545530575)*((c1)*(c2 + (phi)*(phi)))
 x_arr = np.arange(len(x5))
 ax2.plot(x_arr, sf_final_6, label='Stack Size = 6')
 ax2.plot(x_arr, sf_final_8, label='Stack Size = 8')
 ax2.plot(x_arr, sf_final_10, label='Stack Size = 10')
 ax2.plot(x_arr, rb, label='True Values')
+ax2.plot(x_arr, test)       # DELETE ME
 ax2.title.set_text('Features Plotted Over True Bandgap Values')
 ax2.set_xlabel("FEA Nodes")
 ax2.set_ylabel('Band Gap Size')
