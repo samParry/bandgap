@@ -2,6 +2,7 @@
 
 from bingo.symbolic_regression import AGraph
 
+# TODO: Not working for 2 inputs on nested_eqs
 def get_complexity(eq: str, *nested_eqs):
     """
     Returns the true complexity of an equation containing multiple nested
@@ -19,9 +20,12 @@ def get_complexity(eq: str, *nested_eqs):
 
 def main():
     """Example of how to use get_complexity"""
-    X_5 = '(2)*(((X_4)*(X_4))*(((3)*(X_0) + X_4)*((3)*(X_0) + X_4)))'
-    X_6 = 'X_5 + (X_0)*((3)*(X_5) + (-2)*((X_5)*(X_5)))'
-    print(get_complexity(X_6, X_5))
+    x5 = '(12.345913760262821)*(((X_4)*(X_4))*((X_0 + X_4 - ((X_4)*(X_4)))*(X_0 + X_4 - ((X_4)*(X_4)))))'
+    print(AGraph(sympy_representation=x5).get_complexity())
+    x6 = '((X_1)*(X_1))*(X_3) + X_5 + (X_1)*(X_5) - ((X_1)*(X_3))'.replace('X_5', x5)
+    print(AGraph(sympy_representation=x6).get_complexity())
+    x7 = '(1.1437792350379823)*(X_6) + (-2)*(((X_2)*(X_2))*(((X_4)**(-1))*(X_6)))'.replace('X_6', x6)
+    print(AGraph(sympy_representation=x7).get_complexity())
 
 if __name__ == '__main__':
     main()
