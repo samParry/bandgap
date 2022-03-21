@@ -16,4 +16,3 @@ def get_complexity(eq: str, *nested_eqs):
         eq = eq.replace(x, nested_eqs[i])
     graph = AGraph(sympy_representation=eq)
     return graph.get_complexity()
-
