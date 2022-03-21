@@ -48,7 +48,8 @@ X_3 = r
 X_4 = phi
 x_data = np.stack((c1, c2, h, r, phi), axis=-1)
 y_data = rb
-y_data[y_data == 0] = 1e-1
+
+# TODO: Try to normalize data away from being 0s and then invert final equation at the end
 
 # New superfeature(s)
 # x5 = 2*(phi**4 + 6*phi**3*c1 + 9*phi**4*c1**2)

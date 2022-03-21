@@ -16,6 +16,11 @@ h = sheet[:, 2]
 r = sheet[:, 3]
 phi = sheet[:, 4]
 rb = sheet[:, 5]
+X_0 = c1
+X_1 = c2
+X_2 = h
+X_3 = r
+X_4 = phi
 x_default = np.stack((c1, c2, h, r, phi), axis=-1)
 y_data = rb
 
@@ -76,13 +81,13 @@ ax1.bar(x_default_labels, corr_default, zorder=3)
 addlabels(ax1, x_default_labels, corr_default)
 ax1.grid(axis='y', linestyle='--', zorder=0)
 
-test = 0.05480385957888475 + (-0.3799827545530575)*((c1)*(c2 + (phi)*(phi)))
+# test = -0.0016218354429611 + (X_0 + X_3 - (X_2))*(X_0 + (2)*(X_3) - (X_2))
 x_arr = np.arange(len(x5))
 ax2.plot(x_arr, sf_final_6, label='Stack Size = 6')
 ax2.plot(x_arr, sf_final_8, label='Stack Size = 8')
 ax2.plot(x_arr, sf_final_10, label='Stack Size = 10')
 ax2.plot(x_arr, rb, label='True Values')
-ax2.plot(x_arr, test)       # DELETE ME
+# ax2.plot(x_arr, test)       # DELETE ME
 ax2.title.set_text('Features Plotted Over True Bandgap Values')
 ax2.set_xlabel("FEA Nodes")
 ax2.set_ylabel('Band Gap Size')
