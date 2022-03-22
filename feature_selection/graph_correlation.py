@@ -5,6 +5,12 @@ import numpy as np
 import pandas as pd
 
 def addlabels(ax, x, y):
+    """
+    Add text labels onto bars in a bar graph
+    :param ax: matplotlib axis object
+    :param x: x location for label
+    :param y: y location for label
+    """
     for i in range(len(x)):
         ax.text(i, round(y[i],2)/2, round(y[i], 2), ha='center')
 
@@ -63,7 +69,6 @@ sf_final_10 = x9
 fits_10 = [.01194, .00778, .006051, .004972, .004030]
 x_super_10 = np.stack((x5, x6, x7, x8, x9), axis=-1)
 corr_super_10 = np.corrcoef(x_super_10.T, rb.T)[-1,:-1]
-
 
 # plot correlation of features
 fig, axs = plt.subplots(2, 2, figsize=(12, 8))
