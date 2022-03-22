@@ -14,7 +14,6 @@ X_6 = ((X_1)*(X_1))*(X_3) + X_5 + (X_1)*(X_5) - ((X_1)*(X_3))
 X_7 = (1.1437792350379823)*(X_6) + (-2)*(((X_2)*(X_2))*(((X_4)**(-1))*(X_6)))
 sf_final_10 = X_7
 x_super_10 = np.stack((X_5, X_6, X_7), axis=-1)
-corr_10 = np.corrcoef(x_super_10.T, y_data.T)[-1,:-1]
 fits_10 = [.01174, .008687, .006849]
 complexity_10 = [9, 27, 58]
 
@@ -26,7 +25,7 @@ sf_final_20 = X_7
 x_super_20 = np.stack((X_5, X_6, X_7), axis=-1)
 corr_20 = np.corrcoef(x_super_20.T, y_data.T)[-1,:-1]
 fits_20 = [.00966, .005313, .003945]
-complexity_20 = [9, 27, 58]
+complexity_20 = [20, 64, 81]
 
 # plotting
 # fig = plt.figure(constrained_layout=True)
@@ -64,15 +63,15 @@ ax2.legend(loc='lower left')
 
 # plot true complexity of super features
 x = np.arange(3)
-ax3.bar(x-.125, corr_10, width=0.25, label='Stack Size = 10', zorder=3)
-ax3.bar(x+.125, corr_20, width=0.25, label='Stack Size = 20', zorder=3)
+ax3.bar(x-.125, complexity_10, width=0.25, label='Stack Size = 10', zorder=3)
+ax3.bar(x+.125, complexity_20, width=0.25, label='Stack Size = 20', zorder=3)
 ax3.title.set_text("True Complexity of Superfeatures")
 ax3.set_xlabel("Superfeature Iterations")
 ax3.set_ylabel("Complexity")
 ax3.grid(axis='y', linestyle='--', zorder=0)
 ax3.set_xticks(x)
 ax3.set_xticklabels(sf_labels)
-ax3.legend(loc='lower left')
+ax3.legend(loc='upper left')
 
 plt.show()
 plt.close()
