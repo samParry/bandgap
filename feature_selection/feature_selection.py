@@ -18,7 +18,7 @@ from bingo.stats.pareto_front import ParetoFront
 
 # Global parameters
 POP_SIZE = 300
-STACK_SIZE = 10
+STACK_SIZE = 20
 MUTATION_PROBABILITY = 0.4
 CROSSOVER_PROBABILITY = 0.4
 MAX_GENS = 1_000
@@ -83,13 +83,11 @@ def main():
     X_0, X_1, X_2, X_3, X_4 = x_data.T
 
     # add super feature(s) here
-    X_5 = (12.345913760262821)*(((X_4)*(X_4))*((X_0 + X_4 - ((X_4)*(X_4)))*(X_0 + X_4 - ((X_4)*(X_4)))))
+    X_5 = 0.010768645307381816 + (0.08375951370152104)*((X_1 + (-11.27548093458503)*((0.2734952789489305 + X_0)*(X_4 - ((X_2)*(X_2)))))*(X_1 + (-11.27548093458503)*((0.2734952789489305 + X_0)*(X_4 - ((X_2)*(X_2))))))
     x_data = np.append(x_data, X_5.reshape(882, 1), axis=1)
 
-    X_6 = ((X_1)*(X_1))*(X_3) + X_5 + (X_1)*(X_5) - ((X_1)*(X_3))
+    X_6 = (8.983347101758822)*((X_1)*((X_5)*(-0.05372342969980863 + X_1 + X_5 - (X_2)))) + (1.5139595910990273)*(-0.0031797777791105816 + (X_5)*(0.2806226824618265 + X_5))
     x_data = np.append(x_data, X_6.reshape(882, 1), axis=1)
-
-    X_7 = (1.1437792350379823)*(X_6) + (-2)*(((X_2)*(X_2))*(((X_4)**(-1))*(X_6)))
 
     # Agraph generation/variation
     agraph_gen, crossover, mutation = get_generators(x_data, STACK_SIZE, use_simplification)
@@ -98,7 +96,6 @@ def main():
     training_data = ExplicitTrainingData(x_data, y_data)
     fitness = ExplicitRegression(training_data=training_data, metric=regression_metric)
     local_opt_fitness = ContinuousLocalOptimization(fitness, algorithm=clo_algorithm)
-    # make every constant zero and don't change it (hacky solution)
     # local_opt_fitness = ContinuousLocalOptimization(fitness, algorithm=clo_algorithm,
     #                                                   param_init_bounds=(0, 0), tol=100)
     evaluator = Evaluation(local_opt_fitness)
