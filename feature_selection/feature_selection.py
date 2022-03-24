@@ -86,21 +86,19 @@ def main():
     X_0, X_1, X_2, X_3, X_4 = x_data.T
 
     # add super feature(s) here
-    # X_5 = 0.010768645307381816 + (0.08375951370152104)*((X_1 + (-11.27548093458503)*((0.2734952789489305 + X_0)*(X_4 - ((X_2)*(X_2)))))*(X_1 + (-11.27548093458503)*((0.2734952789489305 + X_0)*(X_4 - ((X_2)*(X_2))))))
-    # x_data = np.append(x_data, X_5.reshape(882, 1), axis=1)
-    #
-    # X_6 = (8.983347101758822)*((X_1)*((X_5)*(-0.05372342969980863 + X_1 + X_5 - (X_2)))) + (1.5139595910990273)*(-0.0031797777791105816 + (X_5)*(0.2806226824618265 + X_5))
-    # x_data = np.append(x_data, X_6.reshape(882, 1), axis=1)
+    X_5 = 1.0152511293209976 + (-0.16523851389149383)*(X_1) + (1.2157974820591653)*(((0.7263076646858402 + (2)*(X_0) - (X_1))*(0.7263076646858402 + (2)*(X_0) - (X_1)))*(0.33787306211259266 - (X_2)))
+    x_data = np.append(x_data, X_5.reshape(882, 1), axis=1)
+
+    X_6 = X_5 + (2.3544846492408156)*((0.2522735610185984 + X_2 + (-3.0841194107703234)*(X_2))*((X_1)*((X_5)*((-3.0841194107703234)*(X_2) + X_5)) - ((X_1)*((X_2)*((-3.0841194107703234)*(X_2) + X_5)))))
+    x_data = np.append(x_data, X_6.reshape(882, 1), axis=1)
 
     # Agraph generation/variation
     agraph_gen, crossover, mutation = get_generators(x_data, STACK_SIZE, use_simplification)
 
     # Explicit evaluation & CLO
     training_data = ExplicitTrainingData(x_data, y_data)
-    fitness = ExplicitRegression(training_data=training_data, metric=regression_metric)
+    fitness = ExplicitRegression(training_data=training_data, metric=regression_metric, relative=True)
     local_opt_fitness = ContinuousLocalOptimization(fitness, algorithm=clo_algorithm)
-    # local_opt_fitness = ContinuousLocalOptimization(fitness, algorithm=clo_algorithm,
-    #                                                   param_init_bounds=(0, 0), tol=100)
     evaluator = Evaluation(local_opt_fitness)
 
     # Evolution
@@ -111,7 +109,7 @@ def main():
     t = time()
     island = Island(ea, agraph_gen, POP_SIZE, hall_of_fame=pareto_front)
     island.evolve_until_convergence(max_generations=MAX_GENS, fitness_threshold=FIT_TOL)
-    print(f'Elapsed Time: {round((time() - t) / 60, 2)}min')
+    print(f'Elapsed Time: {round((time() - t) / 60, 2)} min')
     print_pareto_front(pareto_front)
 
 if __name__ == '__main__':
