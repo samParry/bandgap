@@ -9,6 +9,7 @@ regression_metric = 'mse'
 clo_algorithm = 'lm'
 
 Elapsed Time: 3.08min
+true complexity = 11
  FITNESS   COMPLEXITY    EQUATION
 1.174e-02      9      f(X_0) = (12.345913760262821)*(((X_4)*(X_4))*((X_0 + X_4 - ((X_4)*(X_4)))*(X_0 + X_4 - ((X_4)*(X_4)))))
 1.587e-02      8      f(X_0) = (X_0 + X_4)*(X_0 + X_4 - (X_1 + X_2))
