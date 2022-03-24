@@ -1,0 +1,10 @@
+POP_SIZE = 300
+STACK_SIZE = 20
+MUTATION_PROBABILITY = 0.4
+CROSSOVER_PROBABILITY = 0.4
+MAX_GENS = 1_000
+FIT_TOL = 1e-3
+use_simplification = True
+regression_metric = 'mse'
+clo_algorithm = 'lm'
+
