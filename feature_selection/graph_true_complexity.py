@@ -2,7 +2,6 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 from feature_selection import get_training_data
 
 x_data, y_data = get_training_data('data.xlsx')
@@ -47,7 +46,7 @@ ax1.plot(x, y_data, label='True Values', color='r')
 ax1.title.set_text('Superfeatures Over True Bandgap Size')
 ax1.set_xlabel("FEA Nodes")
 ax1.set_ylabel('Band Gap Size')
-ax1.legend(loc='lower left')
+ax1.legend(loc='upper right')
 
 # plot fitness of super features
 x = np.arange(3)
@@ -75,4 +74,3 @@ ax3.legend(loc='upper left')
 
 plt.show()
 plt.close()
-
