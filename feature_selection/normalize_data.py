@@ -4,4 +4,4 @@ def normalize_y(y):
     return y + 1
 
 def denormalize_y(norm_y):
-    return norm - 1
+    return norm_y - 1
