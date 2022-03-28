@@ -13,14 +13,15 @@ from bingo.symbolic_regression.agraph.component_generator import ComponentGenera
 from bingo.symbolic_regression.agraph.crossover import AGraphCrossover
 from bingo.symbolic_regression.agraph.mutation import AGraphMutation
 from bingo.symbolic_regression.explicit_regression import ExplicitTrainingData
-from bingo.symbolic_regression.explicit_regression import ExplicitRegression
+# from bingo.symbolic_regression.explicit_regression import ExplicitRegression
 from bingo.stats.pareto_front import ParetoFront
 
 from normalize_data import *
+from range_fitness import RangeFitness
 
 # Global parameters
 POP_SIZE = 300
-STACK_SIZE = 20
+STACK_SIZE = 5
 MUTATION_PROBABILITY = 0.4
 CROSSOVER_PROBABILITY = 0.4
 MAX_GENS = 1_000
@@ -30,6 +31,15 @@ regression_metric = 'mse'
 clo_algorithm = 'lm'
 # If I want a scalar fitness -> BFGS
 # If I want a vectorized fitness -> lm (faster)
+
+def add_superfeature(sf, x_data):
+    """
+    Include a new superfeature in the x_data array
+    :param sf: Super feature data in flat numpy array
+    :param x_data: n-dimensional x_data array
+    :return: x_data array with the appended super feature
+    """
+    return np.append(x_data, sf.reshape(882, 1), axis=1)
 
 def agraph_similarity(ag_1, ag_2):
     """a similarity metric between agraphs"""
@@ -48,6 +58,8 @@ def get_generators(x_data, stack_size: int, use_simplification: bool):
     component_generator.add_operator("-")
     component_generator.add_operator("*")
     component_generator.add_operator("/")
+    component_generator.add_operator("sin")
+    # TODO: Try evolving with/without sin
     agraph_gen = AGraphGenerator(stack_size, component_generator=component_generator,
                                  use_simplification=use_simplification)
     crossover = AGraphCrossover()
@@ -80,24 +92,26 @@ def print_pareto_front(pareto_front):
         print("%.3e     " % member.fitness, member.get_complexity(), "     f(X_0) =", eq)
 
 def main():
+
     # Build x/y data
     x_data, y_data = get_training_data('data.xlsx')
     y_data = normalize_y(y_data)
     X_0, X_1, X_2, X_3, X_4 = x_data.T
 
     # add super feature(s) here
-    X_5 = -0.01172622096386635 + (((0.03196437234047567)*(((X_3)**(-1))*((-0.6518046192854138 + (-0.00015447173298843318)*((X_2)**(-1)) + X_3)**(-1))) - (X_1))**(-1))*(-0.010812011522255919 + (0.03196437234047567)*(((X_3)**(-1))*((-0.6518046192854138 + (-0.00015447173298843318)*((X_2)**(-1)) + X_3)**(-1))) - (X_1))
-    x_data = np.append(x_data, X_5.reshape(882, 1), axis=1)
-
-    X_6 = (61.201416902671745)*(0.019377605042339 + (((X_5)*(X_5))*((X_5)*(X_5)))*((3.7246904174951387 - ((X_5)*(X_5)))*((-1195.5443409861255 + (X_5)*((X_5)*(X_5)) + (-2)*(((X_5)*((X_5)*(X_5)))*((X_5)*((X_5)*(X_5)))) - ((X_5)*(X_5)))**(-1))))
-    x_data = np.append(x_data, X_6.reshape(882, 1), axis=1)
+    # X_5 = -0.01172622096386635 + (((0.03196437234047567)*(((X_3)**(-1))*((-0.6518046192854138 + (-0.00015447173298843318)*((X_2)**(-1)) + X_3)**(-1))) - (X_1))**(-1))*(-0.010812011522255919 + (0.03196437234047567)*(((X_3)**(-1))*((-0.6518046192854138 + (-0.00015447173298843318)*((X_2)**(-1)) + X_3)**(-1))) - (X_1))
+    # x_data = add_superfeature(X_5, x_data)
+    #
+    # X_6 = (61.201416902671745)*(0.019377605042339 + (((X_5)*(X_5))*((X_5)*(X_5)))*((3.7246904174951387 - ((X_5)*(X_5)))*((-1195.5443409861255 + (X_5)*((X_5)*(X_5)) + (-2)*(((X_5)*((X_5)*(X_5)))*((X_5)*((X_5)*(X_5)))) - ((X_5)*(X_5)))**(-1))))
+    # x_data = add_superfeature(X_6, x_data)
 
     # Agraph generation/variation
     agraph_gen, crossover, mutation = get_generators(x_data, STACK_SIZE, use_simplification)
 
     # Explicit evaluation & CLO
     training_data = ExplicitTrainingData(x_data, y_data)
-    fitness = ExplicitRegression(training_data=training_data, metric=regression_metric, relative=True)
+    # fitness = ExplicitRegression(training_data=training_data, metric=regression_metric, relative=True)
+    fitness = RangeFitness(training_data, clo_type='root')
     local_opt_fitness = ContinuousLocalOptimization(fitness, algorithm=clo_algorithm)
     evaluator = Evaluation(local_opt_fitness)
 
