@@ -2,7 +2,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from feature_selection import get_training_data
+from feature_selection_BINGO import get_training_data
 from normalize_data import denormalize_y
 
 x_data, y_data = get_training_data('data.xlsx')

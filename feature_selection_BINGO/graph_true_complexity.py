@@ -2,7 +2,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from feature_selection import get_training_data
+from feature_selection_BINGO import get_training_data
 
 x_data, y_data = get_training_data('data.xlsx')
 X_0, X_1, X_2, X_3, X_4 = x_data.T
