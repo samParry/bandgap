@@ -59,13 +59,14 @@ from feat import Feat
 
 
 # 2D
+# y = sin(pi*x1)*sin(pi*x2)
 df2 = pd.read_excel('poisson2d_data.xlsx').to_numpy()
 feats2 = df2[:, :2]
 label2 = df2[:, 2]
 funcs = "*,sin"
 # (0.3194*sin(2.0434*x_0)*sin(2.0404*x_1))
 feat = Feat(pop_size=500,           # population size
-            gens=1000,              # maximum generations
+            gens=1,              # maximum generations
             # max_time=500,           # max time in seconds
             # max_depth=1,            # constrain features depth
             # max_dim=10,              # constrain representation dimensionality
@@ -77,7 +78,10 @@ feat = Feat(pop_size=500,           # population size
             functions=funcs,
             simplify=0.01,
             normalize=False,
+            # ml="LinearRidgeRegression"
            )
 
 feat.fit(feats2, label2)
-print(feat.get_model(sort=False))
+print(feat.get_eqn())
+feat.predict(feats2)
+
