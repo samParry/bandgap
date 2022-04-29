@@ -6,7 +6,7 @@ from feat import Feat
 POP = 100
 GENS = 0
 HILLCLIMB = False
-NORM = False
+NORM = True
 ITERS = 10
 
 #######################
@@ -21,9 +21,18 @@ x = df[:, 0].reshape(df.shape[0], 1)
 y = df[:, 1].ravel()
 funcs = "+,*"
 
-feat = Feat(pop_size=POP, gens=GENS, hillclimb=HILLCLIMB,
-			iters=ITERS, n_jobs=12, verbosity=2,
-			otype='f', functions=funcs, normalize=NORM)
+feat = Feat(ml='LinearRidgeRegression',
+            pop_size=POP,
+            gens=GENS,
+            hillclimb=HILLCLIMB,
+    	    iters=ITERS,
+            n_jobs=12,
+            verbosity=2,
+	    otype='f',
+            functions=funcs,
+            normalize=NORM,
+            simplify=0
+           )
 feat.fit(x, y)
 print(feat.get_model())
 
