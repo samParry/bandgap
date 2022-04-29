@@ -24,7 +24,7 @@ clf = Feat(max_depth=5,
            verbosity=1,
            shuffle=True,
            normalize=False, # don't normalize input data
-           functions="and,or,not,split,split_c,"
+           functions="and,or,not,split,split_c,",
                      "mean,median,max,min,variance,skew,kurtosis,slope,count",
            backprop=True,
            batch_size=10,
